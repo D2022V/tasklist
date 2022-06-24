@@ -20,3 +20,11 @@ Route::get('/task', 'TaskController@index');
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+//зто позволит охватить все
+
+
+Route::group(['middleware'=>['auth']], function (){
+    Route::resource('task', 'TaskController', ['except'=>['show']]);
+});
+
