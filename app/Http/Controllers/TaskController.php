@@ -6,6 +6,7 @@ use App\Model\Task;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -21,7 +22,6 @@ class TaskController extends Controller
      */
     public function index()
     {
-
         $tasks = Auth::user()->tasks;
         return view('tasks.index', ['tasks'=>$tasks]);
     }
@@ -49,7 +49,7 @@ class TaskController extends Controller
         ]);
 //        $user = $request->user();//first method
 //        $user = Auth::user();// second method
-        $request->user()->task()->create([
+        $request->user()->tasks()->create([
             'name'=>$request->name,
         ]);
         return redirect(route(('task.index')));
@@ -83,11 +83,13 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Task $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        //
+        $this->authorize('destroy', $task);// чтобы не удалили не свои задачи
+        $task->delete();
+        return redirect(route('task.index'));
     }
 }

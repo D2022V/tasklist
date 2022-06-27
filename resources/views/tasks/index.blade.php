@@ -8,7 +8,7 @@
         <!-- Отображение ошибок проверки ввода -->
         <a href="{{ route('task.create') }}" class="btn btn-default"><i class="fa-fa-plus"></i>New task </a>
     @include('common.errors')
-    @section('content')
+
         <!-- Форма создания задачи... -->
 
             <!-- Текущие задачи -->
@@ -39,9 +39,23 @@
                                     <td class="table-text">
                                         <div>{{ $task->name }}</div>
                                     </td>
-                                    <td>
-                                        <!-- TODO: Кнопка Удалить -->
-                                    </td>
+                                    <tr>
+                                        <!-- Имя задачи -->
+                                        <td class="table-text">
+                                            <div>{{ $task->name }}</div>
+                                        </td>
+
+                                        <!-- Кнопка Удалить -->
+                                        <td>
+                                            <form action="{{ url('task/'.$task->id) }}" method="POST">
+                                                {{ csrf_field() }}
+                                                {{ method_field('DELETE') }}
+                                                <button type="submit" class="btn btn-danger">
+                                                    <i class="fa fa-btn fa-trash"></i>Удалить
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -49,7 +63,6 @@
                     </div>
                 </div>
             @endif
-        @endsection
 
     </div>
 
